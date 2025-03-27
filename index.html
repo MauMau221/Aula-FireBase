@@ -9,25 +9,18 @@
 
 <body>
     <div>
-        <h1>Login</h1>
-        <form id="loginForm" action="">
-            <div>
-                <label for="email">Email: </label>
-                <input type="email" name="email" id="email" required>
-            </div>
-            <div>
-                <label for="password">Senha: </label>
-                <input type="password" name="password" id="password" required>
-            </div>
-            <button>Entrar</button>
-        </form>
+
+        <button id="google" type="submit">Entrar</button>
+
         <p>Não tem conta? <a href="cadastro.html">Cadastre-se aqui!</a></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+
 
         const firebaseConfig = {
             apiKey: "AIzaSyCPmjOVuWOUkXx8hRI0KEifoxDKC8fJOPA",
@@ -38,34 +31,55 @@
             appId: "1:987342065849:web:f8db08473b17f4a4748b68",
             measurementId: "G-06B1EB0RT0"
         };
-
-        //Inicializa o firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         //Inicializa o serviço
-        const auth = getAuth(app)
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
 
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            //Trata (previne) eventos padrão do formulario
-            e.preventDefault()
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed up 
-                    const user = userCredential.user;
+        document.getElementById('google').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user
+                    console.log(user);
+                    const p = document.createElement('p');
+                    p.innerText = 'Testando';
+                    document.body.appendChild(p);
                     window.location.href = "home.html"
-                })
-                .catch((error) => {
+                }).catch((error) => {
                     const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorMessage);
-                    alert('Email ou senha errado');
-                });
+                })
 
         })
+
+
+
+
+        // //Inicializa o firebase
+
+
+        // document.getElementById('loginForm').addEventListener('submit', (e) => {
+        //     //Trata (previne) eventos padrão do formulario
+        //     e.preventDefault()
+
+        //     const email = document.getElementById('email').value;
+        //     const password = document.getElementById('password').value;
+
+        //     signInWithEmailAndPassword(auth, email, password)
+        //         .then((userCredential) => {
+        //             // Signed up
+        //             const user = userCredential.user;
+        //             window.location.href = "home.html"
+        //         })
+        //         .catch((error) => {
+        //             const errorCode = error.code;
+        //             const errorMessage = error.message;
+        //             console.log(errorMessage);
+        //             alert('Email ou senha errado');
+        //         });
+
+        // })
     </script>
 </body>
 
